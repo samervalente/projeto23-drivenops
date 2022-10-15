@@ -22,15 +22,15 @@ services:
       - back-end/.env
 
   react_sorteador_app:
-    container_name: react_sorteador_app
     build: ./front-end
+    container_name: react_sorteador_app
     image: react_sorteador_app_image
     volumes:
      - build_react:/var/www/html
 
   nginx_sorteador_app:
-    container_name: nginx_sorteador_app
     build: ./nginx
+    container_name: nginx_sorteador_app
     image: nginx_sorteador_app_image
     ports:
       - 80:80
