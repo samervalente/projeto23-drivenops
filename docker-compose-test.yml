@@ -1,0 +1,42 @@
+version: "3"
+services:
+  db_drivenops:
+    image: postgres
+    container_name: db_drivenops
+    restart: always
+    ports:
+      - 6022:5432
+    env_file:
+      - back-end/.env.test
+
+  server_drivenops:
+    container_name: server_drivenops
+    build: ./back-end
+    restart: always
+    ports:
+      - 5000:5000
+    depends_on:
+      - db_drivenops
+    env_file:
+      - back-end/.env.test
+    
+  react_sorteador_app:
+    container_name: react_sorteador_app
+    build: ./front-end
+    volumes:
+      - build_react:/var/www/html
+
+  nginx_sorteador_app:
+    container_name: nginx_sorteador_app
+    build: ./nginx
+    ports:
+      - 80:80
+    volumes:
+      - build_react:/var/www/html
+    depends_on:
+      - db_drivenops
+      - server_drivenops
+      - react_sorteador_app
+
+volumes:
+  build_react:
